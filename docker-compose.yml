@@ -1,0 +1,36 @@
+services:
+
+  db:
+    image: postgres:15
+    restart: always
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    env_file:
+      - ./.env
+  web:
+    platform: linux/amd64
+    build: .
+    command: ["./wait-for-it.sh", "db:5432", "--",
+            "bash", "./scripts/run_server.sh"]
+    restart: always
+    volumes:
+      - "./wait-for-it.sh:/wait-for-it.sh:ro"
+      - ./storage/:/code/storage/
+      - ./socket/:/code/socket/
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+
+  nginx:
+    image: nginx:1.23.1
+    restart: always
+    volumes:
+      - ./config/nginx:/etc/nginx/templates
+      - .:/code
+    ports:
+      - "80:80"
+    depends_on:
+      - web

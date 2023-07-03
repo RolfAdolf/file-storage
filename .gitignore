@@ -1,0 +1,9 @@
+venv
+.idea
+.env
+storage
+.pytest_cache
+__pycache__
+.DS_Store
+data
+uwsgi_app.sock

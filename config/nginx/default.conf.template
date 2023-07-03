@@ -1,0 +1,20 @@
+upstream uwsgi_app {
+    server unix:/code/socket/uwsgi_app.sock;
+}
+
+server {
+    listen       80;
+    server_name  localhost;
+    error_log    stderr warn;
+    access_log   /dev/stdout main;
+    client_max_body_size 100M;
+
+    location / {
+        include      /etc/nginx/uwsgi_params;
+        uwsgi_pass   uwsgi_app;
+    }
+
+    location /storage/ {
+           alias /code/storage/;
+    }
+}

@@ -1,0 +1,5 @@
+FLASK_APP=src.app
+FLASK_ENV=production
+FLASK_DEBUG=False
+FLASK_RUN_HOST=localhost
+FLASK_RUN_PORT=8000
